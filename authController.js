@@ -6,24 +6,17 @@ dotenv.config();
 
 // Generate JWT Token
 const generateToken = (id) => {
-  console.log("token");
-  console.log(process.env.JWT_SECRET);
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 // Signup
 export const signup = async (req, res) => {
-  console.log("signup called");
   const { user_name, user_email, user_pass } = req.body;
-  console.log("sign up called");
-  console.log(user_name);
-  console.log(user_email);
-  console.log(user_email);
+
   try {
     const userExists = await User.findOne({ email: user_email });
 
     if (userExists) {
-      console.log("user exit");
       return res.status(400).json({ message: "User already exists" });
     }
 
@@ -32,8 +25,6 @@ export const signup = async (req, res) => {
       email: user_email,
       password: user_pass,
     });
-    console.log("user");
-    console.log(user);
 
     if (user) {
       res.status(201).json({
@@ -75,11 +66,6 @@ export const login = async (req, res) => {
 
 export const testController = async (req, res) => {
   const { user_name, email, password } = req.body;
-
-  console.log("test controller called");
-  console.log(name);
-  console.log(email);
-  console.log(password);
 
   res.status(200).json({ message: "test sucessful" });
 };
