@@ -2,6 +2,7 @@ import User from "./userMode.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import CryptoJS from "crypto-js";
+import bcrypt from "bcryptjs";
 
 dotenv.config();
 const { env } = process;
@@ -19,10 +20,17 @@ export const signup = async (req, res) => {
   console.log(user_pass);
 
   const deCryptedPassword = CryptoJS.AES.decrypt(user_pass, SECRET_CRYPTO_KEY);
+  const stringifiedDecryptedPassword = deCryptedPassword.toString(
+    CryptoJS.enc.Utf8
+  );
 
   console.log("deCryptedPassword");
-  console.log(`${deCryptedPassword.toString(CryptoJS.enc.Utf8)} erger`);
+  console.log(`${stringifiedDecryptedPassword} erger`);
   console.log("stringified");
+
+  const hashedPassword = await bcrypt.hash(stringifiedDecryptedPassword, 8);
+  console.log("hashedPassword");
+  console.log(hashedPassword);
 
   try {
     const userExists = await User.findOne({ email: user_email });
@@ -34,7 +42,7 @@ export const signup = async (req, res) => {
     const user = await User.create({
       name: user_name,
       email: user_email,
-      password: deCryptedPassword.toString(),
+      password: hashedPassword,
     });
 
     if (user) {
