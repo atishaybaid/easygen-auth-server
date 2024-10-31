@@ -1,8 +1,11 @@
 import User from "./userMode.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import CryptoJS from "crypto-js";
 
 dotenv.config();
+const { env } = process;
+const { SECRET_CRYPTO_KEY } = env;
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -12,6 +15,14 @@ const generateToken = (id) => {
 // Signup
 export const signup = async (req, res) => {
   const { user_name, user_email, user_pass } = req.body;
+  console.log("received password");
+  console.log(user_pass);
+
+  const deCryptedPassword = CryptoJS.AES.decrypt(user_pass, SECRET_CRYPTO_KEY);
+
+  console.log("deCryptedPassword");
+  console.log(`${deCryptedPassword.toString(CryptoJS.enc.Utf8)} erger`);
+  console.log("stringified");
 
   try {
     const userExists = await User.findOne({ email: user_email });
@@ -23,7 +34,7 @@ export const signup = async (req, res) => {
     const user = await User.create({
       name: user_name,
       email: user_email,
-      password: user_pass,
+      password: deCryptedPassword.toString(),
     });
 
     if (user) {
