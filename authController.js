@@ -25,8 +25,7 @@ export const signup = async (req, res) => {
   );
 
   console.log("deCryptedPassword");
-  console.log(`${stringifiedDecryptedPassword} erger`);
-  console.log("stringified");
+  console.log(`${stringifiedDecryptedPassword}`);
 
   const hashedPassword = await bcrypt.hash(stringifiedDecryptedPassword, 8);
   console.log("hashedPassword");
@@ -66,8 +65,15 @@ export const login = async (req, res) => {
   const { user_email, user_pass } = req.body;
   try {
     const user = await User.findOne({ email: user_email });
+    const deCryptedPassword = CryptoJS.AES.decrypt(
+      user_pass,
+      SECRET_CRYPTO_KEY
+    );
+    const stringifiedDecryptedPassword = deCryptedPassword.toString(
+      CryptoJS.enc.Utf8
+    );
 
-    if (user && (await user.matchPassword(user_pass))) {
+    if (user && (await user.matchPassword(stringifiedDecryptedPassword))) {
       res.json({
         _id: user._id,
         name: user.name,
