@@ -12,25 +12,33 @@ DataStructure of a message
     },
 
 
+
 }
 
 
 
 */
 
-const ConversationSchema = new mongoose.Schema({
-  // userInfo: { type: SchemaTypes.ObjectId, ref: "User", required: true },
-  text: { type: String, required: true },
-  author: {
-    type: SchemaTypes.ObjectId,
-    ref: "User",
-    required: true,
+const MessageSchema = new mongoose.Schema(
+  {
+    text: { type: String, required: true },
+    author: {
+      type: SchemaTypes.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    conversation: {
+      type: SchemaTypes.ObjectId,
+      ref: "Conversation",
+      required: true,
+    },
   },
-});
+  { timestamps: true }
+);
 
-const Conversation = mongoose.model("Conversation", ConversationSchema);
+const Message = mongoose.model("Message", MessageSchema);
 
-export default Conversation;
+export default Message;
 
 /*
 
