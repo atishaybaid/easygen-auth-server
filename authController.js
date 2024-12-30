@@ -15,7 +15,7 @@ const generateToken = (id) => {
 
 // Signup
 export const signup = async (req, res) => {
-  const { user_name, user_email, user_pass } = req.body;
+  const { user_name, user_email, user_pass, type = "business-user" } = req.body;
   console.log("received password");
   console.log(user_pass);
 
@@ -42,6 +42,7 @@ export const signup = async (req, res) => {
       name: user_name,
       email: user_email,
       password: hashedPassword,
+      type: type,
     });
 
     if (user) {
@@ -50,6 +51,7 @@ export const signup = async (req, res) => {
         name: user.name,
         email: user.email,
         token: generateToken(user._id),
+        type: type,
         success: true,
       });
     } else {
