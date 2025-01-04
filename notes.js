@@ -24,3 +24,15 @@ UNderstanding everything about ai
 
 
 */
+
+/*
+embedding flow
+
+1)store a document with its embeddings
+ - need to think about the details
+
+2)a text will be inputted
+    - it would be converted into embedding represntation
+
+
+*/

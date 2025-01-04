@@ -10,18 +10,44 @@ const openai = new OpenAI({
 console.log("ai agent creds");
 console.log(AI_AGENT_CREDS);
 
+function getTimeofTheDay() {
+  return "Time of the day is 1:43pm";
+}
+
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "getTimeofTheDay",
+      description: "Get time of the day",
+    },
+  },
+];
+
 const formateMessageObjectForOpenAI = (messageList = []) => {
   /*{ role: "user", content: message }*/
   //@todo:think about better way to loop and formate
+
+  /*
+  what are all the options that we can use to refactor the loop
+
+   - map,
+   - forEach
+   - 
+
+
+
+  */
+
   const formattedList = [];
-  messageList.map((messageItem) => {
+  formattedList = messageList.map((messageItem) => {
     const { _id, text } = messageItem;
     const role = _id == "6770f0ebdc79775c22dccf3a" ? "assistant" : "user";
     const message = {
       role: role,
       content: text,
     };
-    formattedList.push(message);
+    return message;
   });
   return formattedList;
 };
@@ -34,6 +60,8 @@ export const generateAIReplies = async (messageList) => {
       messages: [...formattedMessages],
       //max_completion_tokens: 200,
       model: "gpt-4o-mini",
+      tools: tools,
+      tool_choice: "auto",
     });
 
     console.log("chat completion");
@@ -55,7 +83,6 @@ const formateMessageForDb = (messageItem = {}) => {
   const { message } = messageItem;
   const { content } = message;
   /*{ role: "user", content: message }*/
-  //@todo:think about better way to loop and formate
   console.log("ai agent creds at formateMessageForDb");
   console.log(AI_AGENT_CREDS["id"]);
   return { text: content, author: "6770f0ebdc79775c22dccf3a" };
