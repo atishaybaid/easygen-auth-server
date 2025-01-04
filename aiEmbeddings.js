@@ -21,3 +21,29 @@ export const generateEmbeddings = async (inputText) => {
     console.log(error);
   }
 };
+
+function dotProduct(embedding1, embedding2) {
+  if (embedding1.length !== embedding2.length) {
+    throw new Error("Embeddings must have the same length.");
+  }
+  return embedding1.reduce(
+    (sum, value, index) => sum + value * embedding2[index],
+    0
+  );
+}
+
+export const cosineSimilarity = (embedding1, embedding2) => {
+  const dotProd = dotProduct(embedding1, embedding2);
+  const norm1 = Math.sqrt(
+    embedding1.reduce((sum, value) => sum + value ** 2, 0)
+  );
+  const norm2 = Math.sqrt(
+    embedding2.reduce((sum, value) => sum + value ** 2, 0)
+  );
+
+  if (norm1 === 0 || norm2 === 0) {
+    throw new Error("Embeddings must not be zero vectors.");
+  }
+
+  return dotProd / (norm1 * norm2);
+};
