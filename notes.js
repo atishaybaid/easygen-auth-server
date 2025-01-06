@@ -33,6 +33,14 @@ embedding flow
 
 2)a text will be inputted
     - it would be converted into embedding represntation
+    - simlarities will be searched,and the document having maximum simalrity
+schema 
+ - a database having movies 
+
+
+ finding similarities
+  - dot product
+  - co
 
 
 */

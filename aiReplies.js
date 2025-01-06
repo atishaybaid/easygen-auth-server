@@ -61,7 +61,7 @@ export const generateAIReplies = async (messageList) => {
       //max_completion_tokens: 200,
       model: "gpt-4o-mini",
       tools: tools,
-      tool_choice: "auto",
+      tool_choice: "auto"  // the engine will decide  which tool to use
     });
 
     console.log("chat completion");
